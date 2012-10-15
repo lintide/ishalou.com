@@ -1,9 +1,10 @@
 ---
 layout: post
+title: "使用CocoaPods管理iOS的第三方类库"
+date: 2012-10-15 02:44
+comments: true
+categories: 
 ---
-
-使用CocoaPods管理iOS的第三方类库
-==============================
 
 iOS第三方类库的管理是一个很麻烦的事，项目信赖的类库和版本很难控制。让[CocoaPods](https://github.com/CocoaPods/CocoaPods) 来帮帮我们吧。
 
