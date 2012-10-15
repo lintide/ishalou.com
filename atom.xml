@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[i沙漏]]></title>
+  <link href="http://lintide.github.com/ishalou/atom.xml" rel="self"/>
+  <link href="http://lintide.github.com/ishalou/"/>
+  <updated>2012-10-15T15:58:57+08:00</updated>
+  <id>http://lintide.github.com/ishalou/</id>
+  <author>
+    <name><![CDATA[lintide]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[how to use octopress]]></title>
+    <link href="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-octopress/"/>
+    <updated>2012-10-15T02:44:00+08:00</updated>
+    <id>http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-octopress</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How To Use Cocoapods]]></title>
+    <link href="http://lintide.github.com/ishalou/blog/2012/10/14/how-to-use-cocoapods/"/>
+    <updated>2012-10-14T00:00:00+08:00</updated>
+    <id>http://lintide.github.com/ishalou/blog/2012/10/14/how-to-use-cocoapods</id>
+    <content type="html"><![CDATA[<h1>使用CocoaPods管理iOS的第三方类库</h1>
+
+<p>iOS第三方类库的管理是一个很麻烦的事，项目信赖的类库和版本很难控制。让<a href="https://github.com/CocoaPods/CocoaPods">CocoaPods</a> 来帮帮我们吧。</p>
+
+<h2>安装</h2>
+
+<p>先确认自己是否安装了ruby的运行环境，若没有则安装之。接着：</p>
+
+<pre><code>$ gem install cocoapods
+$ pod setup
+</code></pre>
+
+<h2>使用</h2>
+
+<ul>
+<li><p>用Xcode新建一个iOS新项目，创建后目录结果如下：（项目名为：App)</p>
+
+<pre><code>  App
+    |
+    +- App
+    |
+    +- App.xcodeproj
+</code></pre></li>
+<li><p>进入顶层App目录</p>
+
+<pre><code>  $ cd ~/App
+</code></pre></li>
+<li><p>新建一个名为 Podfile 的文件</p>
+
+<pre><code>  $ touch Podfile
+  $ vi Podfile
+</code></pre>
+
+<p>  输入以下内容，并保存</p>
+
+<blockquote><p>platform :ios</p>
+
+<p>pod &#8216;JSONKit&#8217;,     &#8216;~>1.4&#8217;</p>
+
+<p>pod &#8216;Reachability&#8217;,     &#8216;~>2.0.4&#8217;</p></blockquote>
+
+<pre><code>  $ pod install
+</code></pre>
+
+<p>  cocoaPods将自动从服务器中拉取相应的第三方库原代码，将其存放在Pods目录中。</p></li>
+<li><p>现在目录结构如下:</p>
+
+<pre><code>  App
+    |
+    +- App
+    |
+    +- App.xcodeproj
+    |
+    +- App.xcworkspace
+    |
+    +- Podfile
+    |
+    +- Podfile.lock
+    |
+    +- Pods
+</code></pre>
+
+<p>  其中 <code>Pods</code>目录是一个xcode项目，里面包含所有在Podfile中声明的第三方库代码。<code>App.xcworkspace</code> 为xcode的工作空间文件，以后用这个文件来打开项目。</p>
+
+<pre><code>  $ open App.xcworkspace
+</code></pre></li>
+<li><p>Podfile.lock 文件记录所有已安装的代码库的描述，文件如下：</p>
+
+<pre><code>  PODS:
+  - JSONKit (1.5pre)
+  - Reachability (2.0.5)
+
+  DEPENDENCIES:
+  - JSONKit (~&gt; 1.4)
+  - Reachability (~&gt; 2.0.4)
+
+  SPEC CHECKSUMS:
+   JSONKit: a01a22c75f27eae76b4badd55a91c20fe6e86477
+   Reachability: 8d29c8365f72967b6decc8d2892a7d5dc6550799
+</code></pre>
+
+<p>  不要更改这个文件的内容。如果要添加或者删除代码库，在Podfile文件里增加或删除pod声明就可以了。现在第三方库管理起来是不是方便多了呢？</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

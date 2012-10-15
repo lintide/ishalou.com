@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>i沙漏</title>
+  <title>how to use octopress - i沙漏</title>
   <meta name="author" content="lintide">
 
   
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lintide.github.com/ishalou/">
+  <link rel="canonical" href="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-octopress/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -63,15 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/10/15/how-to-use-octopress/">How to Use Octopress</a></h1>
+      <h1 class="entry-title">How to Use Octopress</h1>
     
     
       <p class="meta">
@@ -94,24 +91,18 @@
   </header>
 
 
-  <div class="entry-content">
+<div class="entry-content">
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/10/14/how-to-use-cocoapods/">How to Use Cocoapods</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">lintide</span></span>
+
+      
 
 
 
@@ -123,110 +114,32 @@
   
 
 
-<time datetime="2012-10-14T00:00:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2012</time>
-        
-      </p>
+<time datetime="2012-10-15T02:44:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+      
+
+
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-octopress/" data-via="" data-counturl="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-octopress/" >Tweet</a>
+  
+  
+  
+</div>
 
-
-  <div class="entry-content"><h1>使用CocoaPods管理iOS的第三方类库</h1>
-
-<p>iOS第三方类库的管理是一个很麻烦的事，项目信赖的类库和版本很难控制。让<a href="https://github.com/CocoaPods/CocoaPods">CocoaPods</a> 来帮帮我们吧。</p>
-
-<h2>安装</h2>
-
-<p>先确认自己是否安装了ruby的运行环境，若没有则安装之。接着：</p>
-
-<pre><code>$ gem install cocoapods
-$ pod setup
-</code></pre>
-
-<h2>使用</h2>
-
-<ul>
-<li><p>用Xcode新建一个iOS新项目，创建后目录结果如下：（项目名为：App)</p>
-
-<pre><code>  App
-    |
-    +- App
-    |
-    +- App.xcodeproj
-</code></pre></li>
-<li><p>进入顶层App目录</p>
-
-<pre><code>  $ cd ~/App
-</code></pre></li>
-<li><p>新建一个名为 Podfile 的文件</p>
-
-<pre><code>  $ touch Podfile
-  $ vi Podfile
-</code></pre>
-
-<p>  输入以下内容，并保存</p>
-
-<blockquote><p>platform :ios</p>
-
-<p>pod &#8216;JSONKit&#8217;,     &#8216;~>1.4&#8217;</p>
-
-<p>pod &#8216;Reachability&#8217;,     &#8216;~>2.0.4&#8217;</p></blockquote>
-
-<pre><code>  $ pod install
-</code></pre>
-
-<p>  cocoaPods将自动从服务器中拉取相应的第三方库原代码，将其存放在Pods目录中。</p></li>
-<li><p>现在目录结构如下:</p>
-
-<pre><code>  App
-    |
-    +- App
-    |
-    +- App.xcodeproj
-    |
-    +- App.xcworkspace
-    |
-    +- Podfile
-    |
-    +- Podfile.lock
-    |
-    +- Pods
-</code></pre>
-
-<p>  其中 <code>Pods</code>目录是一个xcode项目，里面包含所有在Podfile中声明的第三方库代码。<code>App.xcworkspace</code> 为xcode的工作空间文件，以后用这个文件来打开项目。</p>
-
-<pre><code>  $ open App.xcworkspace
-</code></pre></li>
-<li><p>Podfile.lock 文件记录所有已安装的代码库的描述，文件如下：</p>
-
-<pre><code>  PODS:
-  - JSONKit (1.5pre)
-  - Reachability (2.0.5)
-
-  DEPENDENCIES:
-  - JSONKit (~&gt; 1.4)
-  - Reachability (~&gt; 2.0.4)
-
-  SPEC CHECKSUMS:
-   JSONKit: a01a22c75f27eae76b4badd55a91c20fe6e86477
-   Reachability: 8d29c8365f72967b6decc8d2892a7d5dc6550799
-</code></pre>
-
-<p>  不要更改这个文件的内容。如果要添加或者删除代码库，在Podfile文件里增加或删除pod声明就可以了。现在第三方库管理起来是不是方便多了呢？</p></li>
-</ul>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/10/14/how-to-use-cocoapods/" title="Previous Post: How To Use Cocoapods">&laquo; How To Use Cocoapods</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -251,6 +164,7 @@ $ pod setup
 
   
 </aside>
+
 
     </div>
   </div>
