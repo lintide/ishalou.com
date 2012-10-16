@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>如何编写一个CocoaPods的spec文件 - i沙漏</title>
+  <meta name="author" content="lintide">
+
+  
+  <meta name="description" content="CocoaPods命令介绍 在上一篇文章中，已经介绍过CocoaPods的几条基本命令。pod setup用于初始化本地第三方库的Spec描述文件，所有的spec文件存都存放在~/.cocoapods目录中。pod install用来安装或删除Podfile文件声明中的第三方依赖库。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lintide.github.com/ishalou/blog/2012/10/16/how-to-create-a-cocoapods-spec-file/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="i沙漏" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">i沙漏</a></h1>
+  
+    <h2>记录自己学习的点滴</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lintide.github.com/ishalou" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">如何编写一个CocoaPods的spec文件</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-16T19:04:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>CocoaPods命令介绍</h2>
+
+<p>在<a href="/blog/2012/10/15/how-to-use-cocoapods/">上一篇文章</a>中，已经介绍过CocoaPods的几条基本命令。<code>pod setup</code>用于初始化本地第三方库的Spec描述文件，所有的spec文件存都存放在<code>~/.cocoapods</code>目录中。<code>pod install</code>用来安装或删除<code>Podfile</code>文件声明中的第三方依赖库。下面继续介绍其它一些命令。</p>
+
+<pre><code>$ pod list
+# 列出所有可用的第三方库
+</code></pre>
+
+<p><span></span></p>
+
+<pre><code>$ pod search query
+</code></pre>
+
+<p>搜索名称包含<code>query</code>的类库，<code>query</code>可以替换为你想搜索的名字（如<code>json</code>)，不区分大小写。也可以使用<code>pod search --full query</code>命令作更仔细的搜索，该命令不但搜索类库的名称，同时还搜索类库的描述文本，所以搜索速度也相对慢一些。</p>
+
+<p><code>pod list</code>和<code>pod search</code>命令只搜索存在于本地<code>~/.cocoapods</code>文件夹的所有第三方库，并不会连接到远程服务器。如果你要从服务器更新本地第三方库的描述文件，可以:</p>
+
+<pre><code>$ pod repo update master
+</code></pre>
+
+<h2>创建自己项目的Podspec描述文件</h2>
+
+<p>CocoaPods还是一个相对年轻的项目，所有的项目的Podspec文件都托管在<a href="https://github.com/CocoaPods/Specs">https://github.com/CocoaPods/Specs</a>。可能有一些库并未收录其中。下面我们通过为<a href="https://github.com/mobileresearch/weibo_ios_sdk_sso-oauth">微博sso认证登录库</a>编写Podspec文件来学习相关的概念。</p>
+
+<p>初始化一个Podspec文件</p>
+
+<pre><code>$ pod spec create weibo_ios_sdk_sso-oauth
+</code></pre>
+
+<p>该命令将在本目录产生一个名为<code>weibo_ios_sdk_sso-oauth.podspec</code>的文件。用编辑器打开该文件，里面已经有非常丰富的说明文档。下面我们介绍如何声明第三方库的<code>代码目录</code>和<code>资源目录</code>，还有该第三方库所依赖ios核心框架和第三方库。</p>
+
+<p>去除所有的注释，podspec文件如下所示:</p>
+
+<pre><code>Pod::Spec.new do |s|
+  s.name     = 'ADVProgressBar'
+  s.version  = '0.0.1'
+  s.license  = 'MIT'
+  s.summary  = 'Progress Bar Design with Percentage values.'
+  s.homepage = 'https://github.com/appdesignvault'
+  s.author   = { 'appdesignvault' =&gt; 'appdesignvault' }
+  s.source   = { :git =&gt; 'https://github.com/appdesignvault/ADVProgressBar.git', :commit =&gt; 'f17b15c15574d6d101cd5fcfd58239e16e806647' }
+  s.platform = :ios  
+  s.source_files = 'ADVProgressBar/Classes/*.{h,m}'
+  s.resources = "ADVProgressBar/Resources/*.png"
+  s.framework = 'UIKit'
+
+  s.requires_arc = true  
+end
+</code></pre>
+
+<p>其中<code>s.name</code>和<code>s.summary</code>用来声明库的名称和一个简短的说明文档。<code>pod search</code>命令就是根据这两项内容作为搜索文本的。<code>s.homepage</code>声明库的主页，<code>s.version</code>库原代码的版本，<code>s.license</code>所采用的授权版本，<code>s.author</code>库的作者。</p>
+
+<p><code>s.source</code> 声明原代码的地址，以微博sso认证登录库为例，它托管在<a href="https://github.com/mobileresearch/weibo_ios_sdk_sso-oauth">https://github.com/mobileresearch/weibo_ios_sdk_sso-oauth</a>中，在其未尾加上<code>.git</code>扩展名就是库的原代码地址了，所以该行应声明为:</p>
+
+<pre><code>s.source = { :git =&gt; 'https://github.com/mobileresearch/weibo_ios_sdk_sso-oauth.git'}
+</code></pre>
+
+<p>对于很多第三方库而言，在发布的时候都会打上一个<code>tag</code>，如版本<code>0.0.1</code>就会打上一个名为<code>v0.0.1</code>的<code>tag</code>，但是weibo_ios_sdk_sso-oauth库还未打上所何<code>tag</code>，我们可以选择一个最新的<code>commit</code>来作为该库0.0.1版的代码。<code>s.source</code>最终如下：</p>
+
+<pre><code>s.source = { :git =&gt; 'https://github.com/mobileresearch/weibo_ios_sdk_sso-oauth.git', :commit =&gt; '68defea78942ecc782ffde8f8ffa747872af226d'}
+</code></pre>
+
+<p>以后我们可以根据该库不同的版本创建相应的podspec文件，例如<code>0.0.2</code>，<code>0.1.0</code>等。</p>
+
+<p>让我们在浏览器中看一下weibo_ios_sdk_sso-oauth的目录结构:</p>
+
+<pre><code>--
+|
++-- demo
+|
++-- src
+|
++-- .gitignore
+|
++-- README.md
+</code></pre>
+
+<p><code>demo</code>目录保存一个示例项目，<code>src</code>才是库的原代码目录。<code>src</code>的目录结构如下:</p>
+
+<pre><code>-- src
+    |
+    +-- JSONKit
+    |
+    +-- SinaWeibo
+    |
+    +-- sinaweibo_ios_sdk.xcodeproj
+    |
+    +-- SinaWeibo-Prefix.pch
+</code></pre>
+
+<p><code>JSONKit</code>目录说明这个库本身依赖于<code>JSONKit</code>第三方库。我们可以在podspec文件中的<code>s.dependency</code>声明段中声明。<code>SinaWeibo</code>目录才是包含所有原代码的目录，我们需要在<code>s.source_files</code>中声明</p>
+
+<pre><code>s.source_files = 'src/SinaWeibo/*.{h,m}'
+</code></pre>
+
+<p>前一部分<code>src/SinaWeibo/</code>是一个相对目录，目录的层级关系一定要跟代码库的保持一致。最后一部分<code>*.{h,m}</code>是一个类似正则表达式的字符串，表示匹配所有以<code>.h</code>和<code>.m</code>为扩展名的文件。</p>
+
+<p><code>src/SinaWeibo/</code>目录下还有一个<code>SinaWeibo.bundle</code>目录，该目录存放一些资源文件（如图片等），这些文件并不需要进行编译。可以使用<code>s.resourcs</code>声明</p>
+
+<pre><code>s.resources = "src/SinaWeibo/SinaWeibo.bundle/**/*.png"
+</code></pre>
+
+<p>前一部分跟上面相同，<code>**</code>表示匹配所有子目录，<code>*.png</code>表示所有以<code>.png</code>为扩展名的图片文件。</p>
+
+<p>通过查看代码我们知道，<code>weibo_ios_sdk_sso-oauth</code>还依赖一个ios的核心库<code>QuartzCore</code></p>
+
+<pre><code>s.framework = 'QuartzCore'
+</code></pre>
+
+<p>在前面我们已经说过，<code>weibo_ios_sdk_sso-oauth</code>库自身也依赖于另外一个第三方库<code>JSONKit</code>，声明如下:</p>
+
+<pre><code>s.dependency 'JSONKit', '~&gt; 1.4'
+</code></pre>
+
+<p>这行声明与Podfile文件中的声明类似。</p>
+
+<p>最终的结果如下：</p>
+
+<pre><code>Pod::Spec.new do |s|
+  s.name         = "weibo_ios_sdk_sso-oauth"
+  s.version      = "0.0.1"
+  s.summary  = 'weibo.com sso oauth, 微博sso认证登录功能'
+  s.homepage     = "https://github.com/mobileresearch/weibo_ios_sdk_sso-oauth"
+  s.license      = 'MIT'
+  s.author       = {'mobileresearch' =&gt; 'mobileresearch'}
+  s.source       = { :git =&gt; 'https://github.com/mobileresearch/weibo_ios_sdk_sso-oauth.git', :commit =&gt; '68defea78942ecc782ffde8f8ffa747872af226d' }
+  s.platform = :ios
+  s.source_files = 'src/SinaWeibo/*.{h,m}'
+  s.resources = "src/SinaWeibo/SinaWeibo.bundle/**/*.png"
+  s.framework  = 'QuartzCore'
+  s.dependency 'JSONKit', '~&gt; 1.4'
+end
+</code></pre>
+
+<p>可以将该spec文件保存到本机的<code>~/.cocoapods/master/</code>目录中仅供自己使用，也可以将其提交到CocoaPods/Specs代码库中。下面我们将其保存到本机中</p>
+
+<pre><code>$ mkdir -p ~/.cocoapods/master/weibo_ios_sdk_sso-oauth/0.0.1
+$ cp weibo_ios_sdk_sso-oauth.podspec ~/.cocoapods/master/weibo_ios_sdk_sso-oauth/0.0.1
+</code></pre>
+
+<p>是否可以通过搜索找到该库:</p>
+
+<pre><code>$ pod search weibo
+</code></pre>
+
+<p>同样在需要依赖于weibo_ios_sdk_sso-oauth这个库的项目，可以将下列添加到项目的Podfile文件中</p>
+
+<pre><code>pod 'weibo_ios_sdk_sso_oauth', '0.0.1'
+</code></pre>
+
+<p>保存文件，并用<code>pod install</code>安装weibo_ios_sdk_sso-oauth库。</p>
+
+<p>转载请注明原作者</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">lintide</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-16T19:04:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lintide.github.com/ishalou/blog/2012/10/16/how-to-create-a-cocoapods-spec-file/" data-via="" data-counturl="http://lintide.github.com/ishalou/blog/2012/10/16/how-to-create-a-cocoapods-spec-file/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/10/15/how-to-use-octopress/" title="Previous Post: 使用Octopress + github管理blog">&laquo; 使用Octopress + github管理blog</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/10/16/how-to-create-a-cocoapods-spec-file/">如何编写一个CocoaPods的spec文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/15/how-to-use-octopress/">使用Octopress + github管理blog</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/15/how-to-use-cocoapods/">使用CocoaPods管理iOS的第三方类库</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - lintide -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
