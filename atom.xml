@@ -4,7 +4,7 @@
   <title><![CDATA[i沙漏]]></title>
   <link href="http://lintide.github.com/ishalou/atom.xml" rel="self"/>
   <link href="http://lintide.github.com/ishalou/"/>
-  <updated>2012-10-17T01:17:12+08:00</updated>
+  <updated>2012-10-17T13:03:48+08:00</updated>
   <id>http://lintide.github.com/ishalou/</id>
   <author>
     <name><![CDATA[lintide]]></name>
@@ -12,6 +12,70 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[我最常用的git命令]]></title>
+    <link href="http://lintide.github.com/ishalou/blog/2012/10/17/my-the-most-commonly-used-git-commands/"/>
+    <updated>2012-10-17T12:43:00+08:00</updated>
+    <id>http://lintide.github.com/ishalou/blog/2012/10/17/my-the-most-commonly-used-git-commands</id>
+    <content type="html"><![CDATA[<h2>文件管理</h2>
+
+<p>添加新增文件或已修改文件到暂存</p>
+
+<pre><code>$ git add filename
+</code></pre>
+
+<p>有多个文件更改时</p>
+
+<pre><code>$ git add .
+</code></pre>
+
+<p>提交更新</p>
+
+<pre><code>$ git commit -m 'msseage'
+</code></pre>
+
+<h2>库管理</h2>
+
+<p>在本地初始化一个库</p>
+
+<pre><code>$ cd dir
+$ git init
+</code></pre>
+
+<p>从远程克隆一个库</p>
+
+<pre><code>$ git clone git://github.com/lintide/jekyll
+</code></pre>
+
+<p>上面克隆的库是只读的，如果你对该库拥用写权限，可以使用<code>git remote set-url</code>修改上面的远程地址</p>
+
+<pre><code>$ git remote -v
+origin git://github.com/lintide/jekyll
+
+$ git remote set-url origin git@github.com:username/jekyll
+</code></pre>
+
+<p><code>username</code>是你在<code>github.com</code>的用户名，<code>git@github.com</code>表示采用<code>ssh</code>登录github.com，这样你就不需要每次都输入用户名了。关于<code>ssh</code>登录的配置方法可以参考其它文章。</p>
+
+<p>打标签</p>
+
+<pre><code>$ git tag -a v1.0.0 -m "version 1.0.0"
+</code></pre>
+
+<p>显示所有标签</p>
+
+<pre><code>$ git tag
+</code></pre>
+
+<p>提交标签不是使用<code>git commit</code>命令，而是</p>
+
+<pre><code>$ git push --tags
+</code></pre>
+
+<blockquote><p>边学边用边记，持续更新中&#8230;</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[如何编写一个CocoaPods的spec文件]]></title>

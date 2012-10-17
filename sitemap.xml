@@ -12,7 +12,13 @@
         <loc>
             http://lintide.github.com/ishalou/blog/2012/10/16/how-to-create-a-cocoapods-spec-file/
         </loc>
-        <lastmod>2012-10-16T21:44:26+08:00</lastmod>
+        <lastmod>2012-10-17T01:21:38+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lintide.github.com/ishalou/blog/2012/10/17/my-the-most-commonly-used-git-commands/
+        </loc>
+        <lastmod>2012-10-17T13:03:23+08:00</lastmod>
     </url>
     <url>
         <loc>http://lintide.github.com/ishalou/aboutme/</loc>
@@ -20,10 +26,10 @@
     </url>
     <url>
         <loc>http://lintide.github.com/ishalou/blog/archives/</loc>
-        <lastmod>2012-10-16T21:44:26+08:00</lastmod>
+        <lastmod>2012-10-17T13:03:23+08:00</lastmod>
     </url>
     <url>
         <loc>http://lintide.github.com/ishalou/</loc>
-        <lastmod>2012-10-16T21:44:26+08:00</lastmod>
+        <lastmod>2012-10-17T13:03:23+08:00</lastmod>
     </url>
 </urlset>
