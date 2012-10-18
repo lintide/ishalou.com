@@ -19,6 +19,13 @@ categories:
     
     $ git commit -m 'msseage'
 
+有时候我们把一些不需要加入版本控制的文件也加入了git库，如何把库中的文件删除，即又保留本地的文件呢？
+    
+    $ git rm --cached filename
+
+如果使用`git rm filename`的话本地文件也将一并删除.
+
+删除文件之后我们一般都要将该文件名加入`.gitignore`文件中。可以参考[gitignore](https://github.com/github/gitignore)，哪种项目需要忽略哪些文件都已经列出。下载相应的项目类型文件，将文件名改为`.gitignore`即可。
 
 ## 库管理  ##
 
