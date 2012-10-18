@@ -4,7 +4,7 @@
   <title><![CDATA[i沙漏]]></title>
   <link href="http://lintide.github.com/ishalou/atom.xml" rel="self"/>
   <link href="http://lintide.github.com/ishalou/"/>
-  <updated>2012-10-17T13:03:48+08:00</updated>
+  <updated>2012-10-18T23:02:27+08:00</updated>
   <id>http://lintide.github.com/ishalou/</id>
   <author>
     <name><![CDATA[lintide]]></name>
@@ -34,6 +34,15 @@
 
 <pre><code>$ git commit -m 'msseage'
 </code></pre>
+
+<p>有时候我们把一些不需要加入版本控制的文件也加入了git库，如何把库中的文件删除，即又保留本地的文件呢？</p>
+
+<pre><code>$ git rm --cached filename
+</code></pre>
+
+<p>如果使用<code>git rm filename</code>的话本地文件也将一并删除.</p>
+
+<p>删除文件之后我们一般都要将该文件名加入<code>.gitignore</code>文件中。可以参考<a href="https://github.com/github/gitignore">gitignore</a>，哪种项目需要忽略哪些文件都已经列出。下载相应的项目类型文件，将文件名改为<code>.gitignore</code>即可。</p>
 
 <h2>库管理</h2>
 
