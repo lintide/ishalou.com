@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>AboutMe - i沙漏</title>
+  <title>用NSLogger代替NSLog输出调试信息 - i沙漏</title>
   <meta name="author" content="lintide">
 
   
-  <meta name="description" content="AboutMe Oct 16th, 2012 我是林瑞潮，我关注移动互联网，对iOS,nodejs,MongoDB,Redis和golang等技术感兴趣。你可以在微博 or twitter上关注我。 Oct 16th, 2012 Tweet Recent Posts &hellip;">
+  <meta name="description" content="安装 NSLogger分为两部分，LoggerClient和NSLogger Viewer，你的App需要导入前者，后者是一个独立的mac应用，NSLogger所有的调试信息将输出到这个应用中。 安装NSLogger: $ vim Podfile
+pod 'NSLogger', '1.1' $ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lintide.github.com/ishalou/aboutme/">
+  <link rel="canonical" href="http://lintide.github.com/ishalou/blog/2012/10/20/how-to-use-nslogger/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -64,32 +65,15 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">AboutMe</h1>
-    <p class="meta">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-16T22:57:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2012</time></p>
-  </header>
-  
-  <p>我是林瑞潮，我关注移动互联网，对iOS,nodejs,MongoDB,Redis和golang等技术感兴趣。你可以在<a href="http://weibo.com/lintide">微博</a> or <a href="http://twitter.com/lintide">twitter</a>上关注我。</p>
-
-  
-    <footer>
+    
+      <h1 class="entry-title">用NSLogger代替NSLog输出调试信息</h1>
+    
+    
       <p class="meta">
         
-        
 
 
 
@@ -101,21 +85,100 @@
   
 
 
-<time datetime="2012-10-16T22:57:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2012</time>
+<time datetime="2012-10-20T22:03:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2012</time>
         
       </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>安装</h2>
+
+<p>NSLogger分为两部分，<code>LoggerClient</code>和<code>NSLogger Viewer</code>，你的App需要导入前者，后者是一个独立的mac应用，NSLogger所有的调试信息将输出到这个应用中。</p>
+
+<p>安装<code>NSLogger</code>:</p>
+
+<pre><code>$ vim Podfile
+pod 'NSLogger', '1.1'
+
+$ pod install
+</code></pre>
+
+<p>如果你不了解Pod，可以参考<a href="/blog/2012/10/15/how-to-use-cocoapods/">这里</a></p>
+
+<h2>编译NSLogger Viewer</h2>
+
+<p>我在第一次编译时，系统出现了这个错误信息:</p>
+
+<pre><code>Code Sign error: The identity '3rd Party Mac Developer Application' doesn't match any valid, non-expired certificate/private key pair in your keychains
+</code></pre>
+
+<p>只需将<code>Build Settings</code> => <code>Code Signing Identity</code> 设置为<code>Don't Code Sign</code>。</p>
+
+<p>编译通行过后会在项目的<code>Products</code>生成一个<code>NSLogger.app</code>的文件，只须把该文件拷贝到应用目录即可。</p>
+
+<h2>使用NSLogger</h2>
+
+<p>在需要用到NSLogger的程序导入<code>LoggerClient.h</code>头文件，一般可在<code>ProjectName_Prefix.pch</code>文件导入:</p>
+
+<pre><code>#import "LoggerClient.h"
+</code></pre>
+
+<p>现在可以用<code>LogMessage</code>等函数来代替<code>NSLog</code>了，更简单的方法是编写一个宏:</p>
+
+<pre><code>#define NSLog(...) LogMessageF( \
+        __FILE__,           \
+        __LINE__,           \
+        __FUNCTION__,       \
+        0, nil,             \
+        __VA_ARGS__)
+</code></pre>
+
+<p>这样，你所有使用<code>NSLog</code>的地方将自动被<code>LogMessageF</code>取代。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-        <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lintide.github.com/ishalou/aboutme/index.html" data-via="" data-counturl="http://lintide.github.com/ishalou/aboutme/index.html" >Tweet</a>
+
+<span class="byline author vcard">Posted by <span class="fn">lintide</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-20T22:03:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lintide.github.com/ishalou/blog/2012/10/20/how-to-use-nslogger/" data-via="" data-counturl="http://lintide.github.com/ishalou/blog/2012/10/20/how-to-use-nslogger/" >Tweet</a>
   
   
   
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+        <a class="basic-alignment left" href="/blog/2012/10/19/ios-app-login-by-qq-tencentoauth/" title="Previous Post: iOS应用使用QQ、新浪微博为第三方登录">&laquo; iOS应用使用QQ、新浪微博为第三方登录</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
 </div>

@@ -9,7 +9,8 @@
   <meta name="author" content="lintide">
 
   
-  <meta name="description" content="文件管理 添加新增文件或已修改文件到暂存 $ git add filename 有多个文件更改时 $ git add . 提交更新 $ git commit -m 'msseage' 有时候我们把一些不需要加入版本控制的文件也加入了git库，如何把库中的文件删除，即又保留本地的文件呢？ $ git &hellip;">
+  <meta name="description" content="安装 NSLogger分为两部分，LoggerClient和NSLogger Viewer，你的App需要导入前者，后者是一个独立的mac应用，NSLogger所有的调试信息将输出到这个应用中。 安装NSLogger: $ vim Podfile
+pod 'NSLogger', '1.1' $ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,161 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/20/how-to-use-nslogger/">用NSLogger代替NSLog输出调试信息</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-20T22:03:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>安装</h2>
+
+<p>NSLogger分为两部分，<code>LoggerClient</code>和<code>NSLogger Viewer</code>，你的App需要导入前者，后者是一个独立的mac应用，NSLogger所有的调试信息将输出到这个应用中。</p>
+
+<p>安装<code>NSLogger</code>:</p>
+
+<pre><code>$ vim Podfile
+pod 'NSLogger', '1.1'
+
+$ pod install
+</code></pre>
+
+<p>如果你不了解Pod，可以参考<a href="/blog/2012/10/15/how-to-use-cocoapods/">这里</a></p>
+
+<h2>编译NSLogger Viewer</h2>
+
+<p>我在第一次编译时，系统出现了这个错误信息:</p>
+
+<pre><code>Code Sign error: The identity '3rd Party Mac Developer Application' doesn't match any valid, non-expired certificate/private key pair in your keychains
+</code></pre>
+
+<p>只需将<code>Build Settings</code> => <code>Code Signing Identity</code> 设置为<code>Don't Code Sign</code>。</p>
+
+<p>编译通行过后会在项目的<code>Products</code>生成一个<code>NSLogger.app</code>的文件，只须把该文件拷贝到应用目录即可。</p>
+
+<h2>使用NSLogger</h2>
+
+<p>在需要用到NSLogger的程序导入<code>LoggerClient.h</code>头文件，一般可在<code>ProjectName_Prefix.pch</code>文件导入:</p>
+
+<pre><code>#import "LoggerClient.h"
+</code></pre>
+
+<p>现在可以用<code>LogMessage</code>等函数来代替<code>NSLog</code>了，更简单的方法是编写一个宏:</p>
+
+<pre><code>#define NSLog(...) LogMessageF( \
+        __FILE__,           \
+        __LINE__,           \
+        __FUNCTION__,       \
+        0, nil,             \
+        __VA_ARGS__)
+</code></pre>
+
+<p>这样，你所有使用<code>NSLog</code>的地方将自动被<code>LogMessageF</code>取代。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/19/ios-app-login-by-qq-tencentoauth/">iOS应用使用QQ、新浪微博为第三方登录</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-19T01:49:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>QQ登录SDK最重要的两个类分别为:<code>TencentOAuth</code>和<code>TencentRequest</code>，前者用于向服务器请求登录，后者用于包含请求信息。目前QQ登录在移动应用还没有采用SSO方式，未来应该会跟进。</p>
+
+<p>在<code>ControllerView</code>类中声明一个类型为<code>TencentOAuth</code>的实例变量，并在<code>- (void)viewDidLoad</code>方法中初始化：</p>
+
+<pre><code>_tencentOAuth = [[TencentOAuth alloc] initWithAppId: @"your app id" andDelegate: self];
+</code></pre>
+
+<p><code>TencentOAuth</code>接受的Delegate为<code>TencentSessionDelegate</code>类型。所以<code>ControllerView</code>对象必须实现<code>TencentSessionDelegate</code>委托。该委托声明了如下方法:</p>
+
+<pre><code>- (void)tencentDidLogin;
+// 登录成功
+
+- (void)tencentDidLogout;
+// 已退出
+
+- (void)tencentDidNotLogin: (BOOL);
+// 登录失败，一种为用户单击了取消按钮。
+
+- (void)tencentDidNotNetwork;
+// 没有网络
+</code></pre>
+
+<p>实现上面的所有方法，接下来向服务器发出认证请求</p>
+
+<pre><code>[_tencentOAuth authorize:_permissions inSafari:NO];
+</code></pre>
+
+<p><code>_permissions</code>是一个数组，数组的每一项代表用户授权的OpenAPI列表，例如可以发表微博，发表说说等。<code>inSafari</code>是否需要在safari中进行登录，默认为NO;</p>
+
+<h2>Weibo登录</h2>
+
+<p>新浪微博已经采用了SSO登录模式，SSO即<code>Single Sign On</code>，单点登录。在官方库中，<code>SinaWeibo</code>和<code>SinaWeiboRequest</code>是两个最重的类，首先声明一个<code>SinaWeibo</code>实例变量:</p>
+
+<pre><code>SinaWeibo *weiboOAth;
+</code></pre>
+
+<p>创建<code>SinaWeibo</code>实例：</p>
+
+<pre><code>weiboOAuth = [[SinaWeibo alloc] initWithAppKey:kAppKey appSecret:kAppSecret appRedirectURI:kAppRedirectURI andDelegate: delegate];
+</code></pre>
+
+<p>待续&#8230;</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -714,6 +870,14 @@ $ pod setup
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/20/how-to-use-nslogger/">用NSLogger代替NSLog输出调试信息</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/19/ios-app-login-by-qq-tencentoauth/">iOS应用使用QQ、新浪微博为第三方登录</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/17/my-the-most-commonly-used-git-commands/">我最常用的git命令</a>
       </li>
     
@@ -723,10 +887,6 @@ $ pod setup
     
       <li class="post">
         <a href="/blog/2012/10/15/how-to-use-octopress/">使用Octopress + github管理blog</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/15/how-to-use-cocoapods/">使用CocoaPods管理iOS的第三方类库</a>
       </li>
     
   </ul>

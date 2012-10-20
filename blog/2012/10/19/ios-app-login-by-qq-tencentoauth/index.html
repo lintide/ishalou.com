@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>使用CocoaPods管理iOS的第三方类库 - i沙漏</title>
+  <title>iOS应用使用QQ、新浪微博为第三方登录 - i沙漏</title>
   <meta name="author" content="lintide">
 
   
-  <meta name="description" content="iOS第三方类库的管理是一个很麻烦的事，项目信赖的类库和版本很难控制。让CocoaPods 来帮帮我们吧。 安装 先确认自己是否安装了ruby的运行环境，若没有则安装之。接着： $ gem install cocoapods
-$ pod setup 使用 用Xcode新建一个iOS新项目， &hellip;">
+  <meta name="description" content="QQ登录SDK最重要的两个类分别为:TencentOAuth和TencentRequest，前者用于向服务器请求登录，后者用于包含请求信息。目前QQ登录在移动应用还没有采用SSO方式，未来应该会跟进。 在ControllerView类中声明一个类型为TencentOAuth的实例变量，并在- ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ $ pod setup 使用 用Xcode新建一个iOS新项目， &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-cocoapods/">
+  <link rel="canonical" href="http://lintide.github.com/ishalou/blog/2012/10/19/ios-app-login-by-qq-tencentoauth/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -69,7 +68,7 @@ $ pod setup 使用 用Xcode新建一个iOS新项目， &hellip;">
   
   <header>
     
-      <h1 class="entry-title">使用CocoaPods管理iOS的第三方类库</h1>
+      <h1 class="entry-title">iOS应用使用QQ、新浪微博为第三方登录</h1>
     
     
       <p class="meta">
@@ -85,95 +84,55 @@ $ pod setup 使用 用Xcode新建一个iOS新项目， &hellip;">
   
 
 
-<time datetime="2012-10-15T02:44:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+<time datetime="2012-10-19T01:49:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>iOS第三方类库的管理是一个很麻烦的事，项目信赖的类库和版本很难控制。让<a href="https://github.com/CocoaPods/CocoaPods">CocoaPods</a> 来帮帮我们吧。</p>
+<div class="entry-content"><p>QQ登录SDK最重要的两个类分别为:<code>TencentOAuth</code>和<code>TencentRequest</code>，前者用于向服务器请求登录，后者用于包含请求信息。目前QQ登录在移动应用还没有采用SSO方式，未来应该会跟进。</p>
 
-<h2>安装</h2>
+<p>在<code>ControllerView</code>类中声明一个类型为<code>TencentOAuth</code>的实例变量，并在<code>- (void)viewDidLoad</code>方法中初始化：</p>
 
-<p>先确认自己是否安装了ruby的运行环境，若没有则安装之。接着：</p>
-
-<pre><code>$ gem install cocoapods
-$ pod setup
+<pre><code>_tencentOAuth = [[TencentOAuth alloc] initWithAppId: @"your app id" andDelegate: self];
 </code></pre>
 
-<h2>使用</h2>
+<p><code>TencentOAuth</code>接受的Delegate为<code>TencentSessionDelegate</code>类型。所以<code>ControllerView</code>对象必须实现<code>TencentSessionDelegate</code>委托。该委托声明了如下方法:</p>
 
-<ul>
-<li><p>用Xcode新建一个iOS新项目，创建后目录结果如下：（项目名为：App)</p>
+<pre><code>- (void)tencentDidLogin;
+// 登录成功
 
-<pre><code>  App
-    |
-    +- App
-    |
-    +- App.xcodeproj
-</code></pre></li>
-<li><p>进入顶层App目录</p>
+- (void)tencentDidLogout;
+// 已退出
 
-<pre><code>  $ cd ~/App
-</code></pre></li>
-<li><p>新建一个名为 Podfile 的文件</p>
+- (void)tencentDidNotLogin: (BOOL);
+// 登录失败，一种为用户单击了取消按钮。
 
-<pre><code>  $ touch Podfile
-  $ vi Podfile
+- (void)tencentDidNotNetwork;
+// 没有网络
 </code></pre>
 
-<p>  输入以下内容，并保存</p>
+<p>实现上面的所有方法，接下来向服务器发出认证请求</p>
 
-<blockquote><p>platform :ios</p>
-
-<p>pod &#8216;JSONKit&#8217;,     &#8216;~>1.4&#8217;</p>
-
-<p>pod &#8216;Reachability&#8217;,     &#8216;~>2.0.4&#8217;</p></blockquote>
-
-<pre><code>  $ pod install
+<pre><code>[_tencentOAuth authorize:_permissions inSafari:NO];
 </code></pre>
 
-<p>  cocoaPods将自动从服务器中拉取相应的第三方库原代码，将其存放在Pods目录中。</p></li>
-<li><p>现在目录结构如下:</p>
+<p><code>_permissions</code>是一个数组，数组的每一项代表用户授权的OpenAPI列表，例如可以发表微博，发表说说等。<code>inSafari</code>是否需要在safari中进行登录，默认为NO;</p>
 
-<pre><code>  App
-    |
-    +- App
-    |
-    +- App.xcodeproj
-    |
-    +- App.xcworkspace
-    |
-    +- Podfile
-    |
-    +- Podfile.lock
-    |
-    +- Pods
+<h2>Weibo登录</h2>
+
+<p>新浪微博已经采用了SSO登录模式，SSO即<code>Single Sign On</code>，单点登录。在官方库中，<code>SinaWeibo</code>和<code>SinaWeiboRequest</code>是两个最重的类，首先声明一个<code>SinaWeibo</code>实例变量:</p>
+
+<pre><code>SinaWeibo *weiboOAth;
 </code></pre>
 
-<p>  其中 <code>Pods</code>目录是一个xcode项目，里面包含所有在Podfile中声明的第三方库代码。<code>App.xcworkspace</code> 为xcode的工作空间文件，以后用这个文件来打开项目。</p>
+<p>创建<code>SinaWeibo</code>实例：</p>
 
-<pre><code>  $ open App.xcworkspace
-</code></pre></li>
-<li><p>Podfile.lock 文件记录所有已安装的代码库的描述，文件如下：</p>
-
-<pre><code>  PODS:
-  - JSONKit (1.5pre)
-  - Reachability (2.0.5)
-
-  DEPENDENCIES:
-  - JSONKit (~&gt; 1.4)
-  - Reachability (~&gt; 2.0.4)
-
-  SPEC CHECKSUMS:
-   JSONKit: a01a22c75f27eae76b4badd55a91c20fe6e86477
-   Reachability: 8d29c8365f72967b6decc8d2892a7d5dc6550799
+<pre><code>weiboOAuth = [[SinaWeibo alloc] initWithAppKey:kAppKey appSecret:kAppSecret appRedirectURI:kAppRedirectURI andDelegate: delegate];
 </code></pre>
 
-<p>  不要更改这个文件的内容。如果要添加或者删除代码库，在Podfile文件里增加或删除pod声明就可以了。现在第三方库管理起来是不是方便多了呢？</p></li>
-</ul>
-
+<p>待续&#8230;</p>
 </div>
 
 
@@ -196,7 +155,7 @@ $ pod setup
   
 
 
-<time datetime="2012-10-15T02:44:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+<time datetime="2012-10-19T01:49:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2012</time>
       
 
 
@@ -204,7 +163,7 @@ $ pod setup
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-cocoapods/" data-via="" data-counturl="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-cocoapods/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lintide.github.com/ishalou/blog/2012/10/19/ios-app-login-by-qq-tencentoauth/" data-via="" data-counturl="http://lintide.github.com/ishalou/blog/2012/10/19/ios-app-login-by-qq-tencentoauth/" >Tweet</a>
   
   
   
@@ -213,8 +172,10 @@ $ pod setup
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2012/10/17/my-the-most-commonly-used-git-commands/" title="Previous Post: 我最常用的git命令">&laquo; 我最常用的git命令</a>
       
-        <a class="basic-alignment right" href="/blog/2012/10/15/how-to-use-octopress/" title="Next Post: 使用Octopress + github管理blog">使用Octopress + github管理blog &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2012/10/20/how-to-use-nslogger/" title="Next Post: 用NSLogger代替NSLog输出调试信息">用NSLogger代替NSLog输出调试信息 &raquo;</a>
       
     </p>
   </footer>
