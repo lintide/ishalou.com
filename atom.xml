@@ -4,7 +4,7 @@
   <title><![CDATA[i沙漏]]></title>
   <link href="http://lintide.github.com/ishalou/atom.xml" rel="self"/>
   <link href="http://lintide.github.com/ishalou/"/>
-  <updated>2012-10-20T22:35:39+08:00</updated>
+  <updated>2013-02-23T14:26:32+08:00</updated>
   <id>http://lintide.github.com/ishalou/</id>
   <author>
     <name><![CDATA[lintide]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[cocos2d v2.0源码分析]]></title>
+    <link href="http://lintide.github.com/ishalou/blog/2013/02/23/cocos2d-v2-dot-0-source/"/>
+    <updated>2013-02-23T14:15:00+08:00</updated>
+    <id>http://lintide.github.com/ishalou/blog/2013/02/23/cocos2d-v2-dot-0-source</id>
+    <content type="html"><![CDATA[<h2>Cocos2d中的关键类及继承关系(以下讨论只涉及iOS版本，不考虑mac版)</h2>
+
+<p><code>CCDirector</code>继承自<code>UIViewController</code>类</p>
+
+<p><code>CCNode</code>继承自<code>NSObject</code></p>
+
+<p><code>CCLayer</code>继承自<code>CCNode</code></p>
+
+<p><code>CCScene</code>继承自<code>CCNode</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[expressjs及mongoose入门]]></title>
+    <link href="http://lintide.github.com/ishalou/blog/2012/10/26/expressjs-mongoose/"/>
+    <updated>2012-10-26T12:04:00+08:00</updated>
+    <id>http://lintide.github.com/ishalou/blog/2012/10/26/expressjs-mongoose</id>
+    <content type="html"><![CDATA[<h2>expressjs 调试</h2>
+
+<p>如果使用</p>
+
+<pre><code>$ node app.js
+</code></pre>
+
+<p>的方式运行服务，每次更改服务器代码时都需要手动结果程序然后再运行，显然在开发阶段更改代码是很频繁的。使用<code>supervisor</code>帮忙省下这些麻烦，一但文件更改，<code>supervisor</code>将自动加载。</p>
+
+<pre><code>$ sudo npm install supervisor -g
+$ supervisor app.js
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ios audio recorder]]></title>
+    <link href="http://lintide.github.com/ishalou/blog/2012/10/23/ios-audio-recorder/"/>
+    <updated>2012-10-23T03:15:00+08:00</updated>
+    <id>http://lintide.github.com/ishalou/blog/2012/10/23/ios-audio-recorder</id>
+    <content type="html"><![CDATA[<p><a href="http://mobileorchard.com/tutorial-detecting-when-a-user-blows-into-the-mic/">参考</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[用NSLogger代替NSLog输出调试信息]]></title>
@@ -56,7 +102,7 @@ $ pod install
         __FILE__,           \
         __LINE__,           \
         __FUNCTION__,       \
-        0, nil,             \
+        nil, 0,             \
         __VA_ARGS__)
 </code></pre>
 

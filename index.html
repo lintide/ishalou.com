@@ -9,8 +9,8 @@
   <meta name="author" content="lintide">
 
   
-  <meta name="description" content="安装 NSLogger分为两部分，LoggerClient和NSLogger Viewer，你的App需要导入前者，后者是一个独立的mac应用，NSLogger所有的调试信息将输出到这个应用中。 安装NSLogger: $ vim Podfile
-pod 'NSLogger', '1.1' $ &hellip;">
+  <meta name="description" content="Cocos2d中的关键类及继承关系(以下讨论只涉及iOS版本，不考虑mac版) CCDirector继承自UIViewController类 CCNode继承自NSObject CCLayer继承自CCNode CCScene继承自CCNode
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,133 @@ pod 'NSLogger', '1.1' $ &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/02/23/cocos2d-v2-dot-0-source/">Cocos2d v2.0源码分析</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-23T14:15:00+08:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Cocos2d中的关键类及继承关系(以下讨论只涉及iOS版本，不考虑mac版)</h2>
+
+<p><code>CCDirector</code>继承自<code>UIViewController</code>类</p>
+
+<p><code>CCNode</code>继承自<code>NSObject</code></p>
+
+<p><code>CCLayer</code>继承自<code>CCNode</code></p>
+
+<p><code>CCScene</code>继承自<code>CCNode</code></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/26/expressjs-mongoose/">Expressjs及mongoose入门</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-26T12:04:00+08:00" pubdate data-updated="true">Oct 26<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>expressjs 调试</h2>
+
+<p>如果使用</p>
+
+<pre><code>$ node app.js
+</code></pre>
+
+<p>的方式运行服务，每次更改服务器代码时都需要手动结果程序然后再运行，显然在开发阶段更改代码是很频繁的。使用<code>supervisor</code>帮忙省下这些麻烦，一但文件更改，<code>supervisor</code>将自动加载。</p>
+
+<pre><code>$ sudo npm install supervisor -g
+$ supervisor app.js
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/23/ios-audio-recorder/">Ios Audio Recorder</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-23T03:15:00+08:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://mobileorchard.com/tutorial-detecting-when-a-user-blows-into-the-mic/">参考</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -133,7 +260,7 @@ $ pod install
         __FILE__,           \
         __LINE__,           \
         __FUNCTION__,       \
-        0, nil,             \
+        nil, 0,             \
         __VA_ARGS__)
 </code></pre>
 
@@ -870,23 +997,23 @@ $ pod setup
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/23/cocos2d-v2-dot-0-source/">cocos2d v2.0源码分析</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/26/expressjs-mongoose/">expressjs及mongoose入门</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/23/ios-audio-recorder/">ios audio recorder</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/20/how-to-use-nslogger/">用NSLogger代替NSLog输出调试信息</a>
       </li>
     
       <li class="post">
         <a href="/blog/2012/10/19/ios-app-login-by-qq-tencentoauth/">iOS应用使用QQ、新浪微博为第三方登录</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/17/my-the-most-commonly-used-git-commands/">我最常用的git命令</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/16/how-to-create-a-cocoapods-spec-file/">如何编写一个CocoaPods的spec文件</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/15/how-to-use-octopress/">使用Octopress + github管理blog</a>
       </li>
     
   </ul>
@@ -903,7 +1030,7 @@ $ pod setup
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - lintide -
+  Copyright &copy; 2013 - lintide -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>使用CocoaPods管理iOS的第三方类库 - i沙漏</title>
+  <title>expressjs及mongoose入门 - i沙漏</title>
   <meta name="author" content="lintide">
 
   
-  <meta name="description" content="iOS第三方类库的管理是一个很麻烦的事，项目信赖的类库和版本很难控制。让CocoaPods 来帮帮我们吧。 安装 先确认自己是否安装了ruby的运行环境，若没有则安装之。接着： $ gem install cocoapods
-$ pod setup 使用 用Xcode新建一个iOS新项目， &hellip;">
+  <meta name="description" content="expressjs 调试 如果使用 $ node app.js 的方式运行服务，每次更改服务器代码时都需要手动结果程序然后再运行，显然在开发阶段更改代码是很频繁的。使用supervisor帮忙省下这些麻烦，一但文件更改，supervisor将自动加载。 $ sudo npm install &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ $ pod setup 使用 用Xcode新建一个iOS新项目， &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-cocoapods/">
+  <link rel="canonical" href="http://lintide.github.com/ishalou/blog/2012/10/26/expressjs-mongoose/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -69,7 +68,7 @@ $ pod setup 使用 用Xcode新建一个iOS新项目， &hellip;">
   
   <header>
     
-      <h1 class="entry-title">使用CocoaPods管理iOS的第三方类库</h1>
+      <h1 class="entry-title">Expressjs及mongoose入门</h1>
     
     
       <p class="meta">
@@ -85,95 +84,25 @@ $ pod setup 使用 用Xcode新建一个iOS新项目， &hellip;">
   
 
 
-<time datetime="2012-10-15T02:44:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+<time datetime="2012-10-26T12:04:00+08:00" pubdate data-updated="true">Oct 26<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>iOS第三方类库的管理是一个很麻烦的事，项目信赖的类库和版本很难控制。让<a href="https://github.com/CocoaPods/CocoaPods">CocoaPods</a> 来帮帮我们吧。</p>
+<div class="entry-content"><h2>expressjs 调试</h2>
 
-<h2>安装</h2>
+<p>如果使用</p>
 
-<p>先确认自己是否安装了ruby的运行环境，若没有则安装之。接着：</p>
-
-<pre><code>$ gem install cocoapods
-$ pod setup
+<pre><code>$ node app.js
 </code></pre>
 
-<h2>使用</h2>
+<p>的方式运行服务，每次更改服务器代码时都需要手动结果程序然后再运行，显然在开发阶段更改代码是很频繁的。使用<code>supervisor</code>帮忙省下这些麻烦，一但文件更改，<code>supervisor</code>将自动加载。</p>
 
-<ul>
-<li><p>用Xcode新建一个iOS新项目，创建后目录结果如下：（项目名为：App)</p>
-
-<pre><code>  App
-    |
-    +- App
-    |
-    +- App.xcodeproj
-</code></pre></li>
-<li><p>进入顶层App目录</p>
-
-<pre><code>  $ cd ~/App
-</code></pre></li>
-<li><p>新建一个名为 Podfile 的文件</p>
-
-<pre><code>  $ touch Podfile
-  $ vi Podfile
+<pre><code>$ sudo npm install supervisor -g
+$ supervisor app.js
 </code></pre>
-
-<p>  输入以下内容，并保存</p>
-
-<blockquote><p>platform :ios</p>
-
-<p>pod &#8216;JSONKit&#8217;,     &#8216;~>1.4&#8217;</p>
-
-<p>pod &#8216;Reachability&#8217;,     &#8216;~>2.0.4&#8217;</p></blockquote>
-
-<pre><code>  $ pod install
-</code></pre>
-
-<p>  cocoaPods将自动从服务器中拉取相应的第三方库原代码，将其存放在Pods目录中。</p></li>
-<li><p>现在目录结构如下:</p>
-
-<pre><code>  App
-    |
-    +- App
-    |
-    +- App.xcodeproj
-    |
-    +- App.xcworkspace
-    |
-    +- Podfile
-    |
-    +- Podfile.lock
-    |
-    +- Pods
-</code></pre>
-
-<p>  其中 <code>Pods</code>目录是一个xcode项目，里面包含所有在Podfile中声明的第三方库代码。<code>App.xcworkspace</code> 为xcode的工作空间文件，以后用这个文件来打开项目。</p>
-
-<pre><code>  $ open App.xcworkspace
-</code></pre></li>
-<li><p>Podfile.lock 文件记录所有已安装的代码库的描述，文件如下：</p>
-
-<pre><code>  PODS:
-  - JSONKit (1.5pre)
-  - Reachability (2.0.5)
-
-  DEPENDENCIES:
-  - JSONKit (~&gt; 1.4)
-  - Reachability (~&gt; 2.0.4)
-
-  SPEC CHECKSUMS:
-   JSONKit: a01a22c75f27eae76b4badd55a91c20fe6e86477
-   Reachability: 8d29c8365f72967b6decc8d2892a7d5dc6550799
-</code></pre>
-
-<p>  不要更改这个文件的内容。如果要添加或者删除代码库，在Podfile文件里增加或删除pod声明就可以了。现在第三方库管理起来是不是方便多了呢？</p></li>
-</ul>
-
 </div>
 
 
@@ -196,7 +125,7 @@ $ pod setup
   
 
 
-<time datetime="2012-10-15T02:44:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+<time datetime="2012-10-26T12:04:00+08:00" pubdate data-updated="true">Oct 26<span>th</span>, 2012</time>
       
 
 
@@ -204,7 +133,7 @@ $ pod setup
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-cocoapods/" data-via="" data-counturl="http://lintide.github.com/ishalou/blog/2012/10/15/how-to-use-cocoapods/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lintide.github.com/ishalou/blog/2012/10/26/expressjs-mongoose/" data-via="" data-counturl="http://lintide.github.com/ishalou/blog/2012/10/26/expressjs-mongoose/" >Tweet</a>
   
   
   
@@ -213,8 +142,10 @@ $ pod setup
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2012/10/23/ios-audio-recorder/" title="Previous Post: ios audio recorder">&laquo; ios audio recorder</a>
       
-        <a class="basic-alignment right" href="/blog/2012/10/15/how-to-use-octopress/" title="Next Post: 使用Octopress + github管理blog">使用Octopress + github管理blog &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2013/02/23/cocos2d-v2-dot-0-source/" title="Next Post: cocos2d v2.0源码分析">cocos2d v2.0源码分析 &raquo;</a>
       
     </p>
   </footer>

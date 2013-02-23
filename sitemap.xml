@@ -28,7 +28,19 @@
     </url>
     <url>
         <loc>http://lintide.github.com/ishalou/blog/2012/10/20/how-to-use-nslogger/</loc>
-        <lastmod>2012-10-20T22:31:17+08:00</lastmod>
+        <lastmod>2012-10-20T22:51:41+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lintide.github.com/ishalou/blog/2012/10/23/ios-audio-recorder/</loc>
+        <lastmod>2012-10-23T03:16:20+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lintide.github.com/ishalou/blog/2012/10/26/expressjs-mongoose/</loc>
+        <lastmod>2012-10-26T12:11:08+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lintide.github.com/ishalou/blog/2013/02/23/cocos2d-v2-dot-0-source/</loc>
+        <lastmod>2013-02-23T14:25:37+08:00</lastmod>
     </url>
     <url>
         <loc>http://lintide.github.com/ishalou/aboutme/</loc>
@@ -36,10 +48,10 @@
     </url>
     <url>
         <loc>http://lintide.github.com/ishalou/blog/archives/</loc>
-        <lastmod>2012-10-20T22:35:26+08:00</lastmod>
+        <lastmod>2013-02-23T14:25:37+08:00</lastmod>
     </url>
     <url>
         <loc>http://lintide.github.com/ishalou/</loc>
-        <lastmod>2012-10-20T22:35:26+08:00</lastmod>
+        <lastmod>2013-02-23T14:25:37+08:00</lastmod>
     </url>
 </urlset>
