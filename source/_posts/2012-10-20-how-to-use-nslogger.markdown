@@ -41,7 +41,7 @@ NSLogger分为两部分，`LoggerClient`和`NSLogger Viewer`，你的App需要�
             __FILE__,           \
             __LINE__,           \
             __FUNCTION__,       \
-            0, nil,             \
+            nil, 0,             \
             __VA_ARGS__)
 
 这样，你所有使用`NSLog`的地方将自动被`LogMessageF`取代。
